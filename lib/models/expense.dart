@@ -1,3 +1,7 @@
+import 'package:uuid/uuid.dart';
+
+const uuid = Uuid();
+
 enum Category { food,travel,bills,shopping,other}
 
 class Expense{
@@ -8,10 +12,11 @@ class Expense{
     final DateTime date;
 
     Expense({
-        required this.id,
         required this.title,
         required this.amount,
         required this.category,
         required this.date,
-    });
-}
+    }): id = uuid.v4();
+ }
+
+ 
