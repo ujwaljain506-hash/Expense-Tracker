@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracker/providers/expense_provider.dart';
+import 'package:expense_tracker/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,14 +19,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Expense Tracker'),
-          ),
-          body: const Center(
-            child: Text('Expense Tracker is alive!'),
-          ),
-        ),
+        home: const HomeScreen(),
       ),
     );
   }
