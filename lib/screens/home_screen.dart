@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracker/providers/expense_provider.dart';
+import 'package:expense_tracker/screens/add_expense_screen.dart';
 
 class HomeScreen extends StatelessWidget {
     const HomeScreen({super.key});
@@ -31,7 +32,12 @@ class HomeScreen extends StatelessWidget {
                     },
                  ),
                 floatingActionButton: FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) => const AddExpenseScreen(),
+                        );
+                    },
                     child: const Icon(Icons.add),
                 ),
         );
