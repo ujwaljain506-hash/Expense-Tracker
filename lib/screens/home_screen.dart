@@ -16,30 +16,66 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Expense Tracker'),
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             ),
-            body: expenses.isEmpty
-                ? const Center(
-                    child: Text('No expenses added yet!'),
-                )
-                : ListView.builder(
-                    itemCount: expenses.length,
-                    itemBuilder: (context, index) {
-                        final expense = expenses[index];
-                        return ListTile(
-                            title: Text(expense.title),
-                            subtitle: Text(expense.category.name),
-                            trailing: Text('₹${expense.amount}'),
-                            );
-                    },
-                 ),
-                floatingActionButton: FloatingActionButton(
-                    onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) => const AddExpenseScreen(),
-                        );
-                    },
-                    child: const Icon(Icons.add),
-                ),
-        );
-    }
+           body: Column(
+  children: [
+    Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Budget: ₹${provider.totalExpenses.toStringAsFixed(2)} / ₹${provider.budgetLimit.toStringAsFixed(2)}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          LinearProgressIndicator(
+            value: (provider.totalExpenses / provider.budgetLimit).clamp(0.0, 1.0),
+            minHeight: 12,
+            backgroundColor: Colors.grey[300],
+            valueColor: AlwaysStoppedAnimation<Color>(
+              provider.totalExpenses >= provider.budgetLimit
+                  ? Colors.red
+                  : Colors.teal,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            provider.remainingBudget >= 0
+                ? '₹${provider.remainingBudget.toStringAsFixed(2)} remaining'
+                : 'Over budget by ₹${(provider.remainingBudget * -1).toStringAsFixed(2)}',
+            style: TextStyle(
+              color: provider.remainingBudget >= 0 ? Colors.green : Colors.red,
+            ),
+          ),
+        ],
+      ),
+    ),
+    Expanded(
+      child: expenses.isEmpty
+          ? const Center(child: Text('No expenses yet. Add one!'))
+          : ListView.builder(
+              itemCount: expenses.length,
+              itemBuilder: (context, index) {
+                final expense = expenses[index];
+                return ListTile(
+                  title: Text(expense.title),
+                  subtitle: Text(expense.category.name),
+                  trailing: Text('₹${expense.amount}'),
+                );
+              },
+            ),
+    ),
+  ],
+),
+floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => const AddExpenseScreen(),
+    );
+  },
+  child: const Icon(Icons.add),
+),
+);
+}
 }
