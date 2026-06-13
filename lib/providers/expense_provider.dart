@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 
-class ExpenseProvider extends ChangeNotifier{
-    final List<Expense> _expenses = [];
-    double _budgetLimit = 5000;
+class ExpenseProvider extends ChangeNotifier {
+  final List<Expense> _expenses = [];
+  double _budget = 10000;
 
-    List<Expense> get expenses => _expenses;
+  List<Expense> get expenses => _expenses;
 
-    double get totalExpenses {
-        return _expenses.fold(0, (sum, expense) => sum + expense.amount);
-    }
+  double get budget => _budget;
 
-    void addExpense(Expense expense){
-        _expenses.add(expense);
-        notifyListeners();
-    }
+  void setBudget(double amount) {
+    _budget = amount;
+    notifyListeners();
+  }
 
-    void deleteExpense(String id){
-     _expenses.removeWhere((expense) => expense.id == id);
-     notifyListeners();
-     }
+  double get totalExpenses {
+    return _expenses.fold(0, (sum, expense) => sum + expense.amount);
+  }
 
-    double get budgetLimit => _budgetLimit;
+  Map<Category, double> get expensesByCategory {
+  final map = <Category, double>{};
+  for (final expense in _expenses) {
+    map[expense.category] = (map[expense.category] ?? 0) + expense.amount;
+  }
+  return map;
+}
 
-    double get remainingBudget => _budgetLimit - totalExpenses;
+  void addExpense(Expense expense) {
+    _expenses.add(expense);
+    notifyListeners();
+  }
 
-    void setBudgetLimit(double amount){
-        _budgetLimit = amount;
-        notifyListeners();
-    }
-
- 
+  void deleteExpense(String id) {
+    _expenses.removeWhere((expense) => expense.id == id);
+    notifyListeners();
+  }
 }

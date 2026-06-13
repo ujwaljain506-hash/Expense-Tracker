@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:expense_tracker/providers/expense_provider.dart';
 import 'package:expense_tracker/screens/add_expense_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:expense_tracker/screens/chart_screen.dart';
 
 class HomeScreen extends StatelessWidget {
     const HomeScreen({super.key});
@@ -18,41 +20,56 @@ class HomeScreen extends StatelessWidget {
             ),
            body: Column(
   children: [
-    Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Budget: ₹${provider.totalExpenses.toStringAsFixed(2)} / ₹${provider.budgetLimit.toStringAsFixed(2)}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: (provider.totalExpenses / provider.budgetLimit).clamp(0.0, 1.0),
-            minHeight: 12,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(
-              provider.totalExpenses >= provider.budgetLimit
-                  ? Colors.red
-                  : Colors.teal,
+    Consumer<ExpenseProvider>(
+      builder: (context, provider, child) {
+        final total = provider.totalExpenses;
+        final budget = provider.budget;
+        final progress = (total / budget).clamp(0.0, 1.0);
+
+        return Card(
+          margin: const EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Monthly Budget',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 10,
+                  backgroundColor: Colors.grey[200],
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    progress >= 1.0 ? Colors.red : Colors.teal,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Spent: ₹$total'),
+                    Text('Budget: ₹$budget'),
+                  ],
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            provider.remainingBudget >= 0
-                ? '₹${provider.remainingBudget.toStringAsFixed(2)} remaining'
-                : 'Over budget by ₹${(provider.remainingBudget * -1).toStringAsFixed(2)}',
-            style: TextStyle(
-              color: provider.remainingBudget >= 0 ? Colors.green : Colors.red,
-            ),
-          ),
-        ],
-      ),
+        );
+      },
+    ),
+    const SizedBox(height: 8),
+    const SizedBox(
+      height: 250,
+      child: ChartScreen(),
     ),
     Expanded(
       child: expenses.isEmpty
-          ? const Center(child: Text('No expenses yet. Add one!'))
+          ? const Center(
+              child: Text('No expenses yet. Add one!'),
+            )
           : ListView.builder(
               itemCount: expenses.length,
               itemBuilder: (context, index) {
