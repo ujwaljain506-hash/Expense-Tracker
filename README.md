@@ -1,16 +1,35 @@
-# expense_tracker
+# Expense Tracker 💰
 
-A new Flutter project.
+A Flutter app to track your daily expenses, built as my second portfolio project.
 
-## Getting Started
+## What it does
 
-This project is a starting point for a Flutter application.
+- Add expenses with a title, amount, and category (Food, Travel, Bills, Shopping, Other)
+- View a pie chart breaking down spending by category
+- Track a monthly budget with a progress bar that turns red when you overspend
+- Swipe left on any expense to delete it
+- Category icons for quick visual identification
 
-A few resources to get you started if this is your first Flutter project:
+## Built with
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** — UI framework
+- **Provider** — state management
+- **fl_chart** — pie chart
+- **uuid** — unique IDs for each expense
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## What I learned
+
+This was my first real Flutter project. I learned how the widget tree works, the difference between StatelessWidget and StatefulWidget, and how Provider separates logic from UI. The hardest parts were implementing swipe-to-delete with Dismissible and adding category icons — both were completely new concepts for me.
+
+## Screenshots
+
+![Expense Tracker App](screenshot.png)
+
+## How to run
+
+```bash
+git clone https://github.com/ujwaljain506-hash/Expense-Tracker.git
+cd Expense-Tracker
+flutter pub get
+flutter run
+```
